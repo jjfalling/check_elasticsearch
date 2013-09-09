@@ -1,4 +1,4 @@
 This is a Nagios and Icinga check for elasticsearch.
 
-It allow you to monitor the health of a single node or cluster as well as various aspects. 
+It allow you to monitor the health of a single node or cluster as well as various other aspects of elasticsearch. 
 See --man for more options

@@ -120,7 +120,7 @@ sub processData {
 		
 		
 		if ($operator eq "<") {	
-			if ($thresholdValues[0] > $thresholdValues[1]){print "Error: warning value cannot be greater then critical value\n"; exit $STATE_UNKNOWN}
+			if ($thresholdValues[1] < $thresholdValues[1]){print "Error: warning value cannot be less then critical value\n"; exit $STATE_UNKNOWN}
 		
 			if ("$esHashItem" < $thresholdValues[1]) {
 				push (@statusMessage,  "$errorMessage");
@@ -132,7 +132,7 @@ sub processData {
 			}
 		}
 		elsif ($operator eq ">") {	
-			if ($thresholdValues[0] < $thresholdValues[1]){print "Error: warning value cannot be less then critical value\n"; exit $STATE_UNKNOWN }
+			if ($thresholdValues[0] > $thresholdValues[1]){print "Error: warning value cannot be greater then critical value\n"; exit $STATE_UNKNOWN }
 
 			if ("$esHashItem" > $thresholdValues[1]) {
 				push (@statusMessage,  "$errorMessage");

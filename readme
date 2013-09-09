@@ -1,0 +1,3 @@
+This is a Nagios and Icinga check for elasticsearch.
+
+It allow you to monitor the health of a single node or cluster as well as various aspects. 

@@ -92,15 +92,15 @@ elsif ($jsonData->{'status'} eq "yellow") {push (@statusMessage,  "Cluster is ye
 elsif ($jsonData->{'status'} eq "red") {push (@statusMessage,  "Cluster is red");processStatus($STATE_CRITICAL)}
 else {push (@statusMessage,  "ERROR: unknown cluster state")}
 
-#run checks
-if ($opt_minNodes){processData("$opt_minNodes", "$jsonData->{'number_of_nodes'}", "<", "$jsonData->{'number_of_nodes'} of a minimum of $opt_minNodes nodes found")}
-if ($opt_minDataNodes){processData("$opt_minDataNodes", "$jsonData->{'number_of_data_nodes'}", "<", "$jsonData->{'number_of_data_nodes'} of a minimum of $opt_minDataNodes data nodes found")}
-if ($opt_minNonDataNodes){my $nonDataNodes = $jsonData->{'number_of_nodes'} - $jsonData->{'number_of_data_nodes'}; processData("$opt_minNonDataNodes", "$nonDataNodes", "<", "$nonDataNodes of a minimum of $opt_minNonDataNodes non data nodes found")}
-if ($opt_minActivePrimaryShards){processData("$opt_minActivePrimaryShards", "$jsonData->{'active_primary_shards'}", "<", "$jsonData->{'active_primary_shards'} of a minimum of $opt_minActivePrimaryShards active primary shards found")}
-if ($opt_minActiveShards){processData("$opt_minActiveShards", "$jsonData->{'active_shards'}", "<", "$jsonData->{'active_shards'} of a minimum of $opt_minActiveShards active shards found")}
-if ($opt_maxUnassignedShards){processData("$opt_maxUnassignedShards", "$jsonData->{'unassigned_shards'}", ">", "$jsonData->{'unassigned_shards'} of a maximum of $opt_maxUnassignedShards unassigned shards found")}
-if ($opt_maxInitializingShards){processData("$opt_maxInitializingShards", "$jsonData->{'initializing_shards'}", "<", "$jsonData->{'initializing_shards'} of a minimum of $opt_maxInitializingShards initilizing shards found")}
 
+#run checks
+if ($opt_minNodes){processData("$jsonData->{'number_of_nodes'}", "<", "$opt_minNodes", "$jsonData->{'number_of_nodes'} of a minimum of $opt_minNodes nodes found")}
+if ($opt_minDataNodes){processData("$jsonData->{'number_of_data_nodes'}", "<", "$opt_minDataNodes", "$jsonData->{'number_of_data_nodes'} of a minimum of $opt_minDataNodes data nodes found")}
+if ($opt_minNonDataNodes){my $nonDataNodes = $jsonData->{'number_of_nodes'} - $jsonData->{'number_of_data_nodes'}; processData("$nonDataNodes", "<", "$opt_minNonDataNodes", "$nonDataNodes of a minimum of $opt_minNonDataNodes non data nodes found")}
+if ($opt_minActivePrimaryShards){processData("$jsonData->{'active_primary_shards'}", "<","$opt_minActivePrimaryShards", "$jsonData->{'active_primary_shards'} of a minimum of $opt_minActivePrimaryShards active primary shards found")}
+if ($opt_minActiveShards){processData("$jsonData->{'active_shards'}", "<", "$opt_minActiveShards", "$jsonData->{'active_shards'} of a minimum of $opt_minActiveShards active shards found")}
+if ($opt_maxUnassignedShards){processData("$jsonData->{'unassigned_shards'}", ">", "$opt_maxUnassignedShards", "$jsonData->{'unassigned_shards'} of a maximum of $opt_maxUnassignedShards unassigned shards found")}
+if ($opt_maxInitializingShards){processData("$jsonData->{'initializing_shards'}", ">", "$opt_maxInitializingShards", "$jsonData->{'initializing_shards'} of a minimum of $opt_maxInitializingShards initilizing shards found")}
 
 #give status as message and exit with correct code
 print join("\n", @statusMessage);
@@ -112,7 +112,7 @@ exit $status;
 
 sub processData {
     # Get data passed to function
-    my ($threshold, $esHashItem, $operator, $errorMessage) = @_;
+    my ($esHashItem, $operator, $threshold, $errorMessage) = @_;
 
 	#check if range or single value was given
 	if ($threshold =~ /:/){
@@ -195,7 +195,7 @@ check_elasticsearch --node hostname [options]
 
 The only required option is --node to check for cluster state. 
 
-Options that take ranges are in the format of warning:critical. If no range is given a critical state will be raised. 
+Options that take ranges are in the format of warning:critical, ie 3:4. If no range is given a critical state will be raised. 
 
 =over 8
 
